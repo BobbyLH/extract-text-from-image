@@ -35,26 +35,32 @@ for entry in entries:
           os.remove(img_removed_noise_path)
           os.remove(img_enhanced_path)
           lst = text.split('\n')
-          reg = re.compile('^(1)[0-9]{10}$')
-          row_count = 0
-          total = len(lst)
-          for txt in lst:
-            if reg.match(txt):
-              row_count = total - lst.index(txt)
-              print(row_count)
-              break
           wb = Workbook()
           ws = wb.active
-          cursor_index = total % row_count
-          column_index = 1
-          while cursor_index < total:
-            start_index = cursor_index
-            cursor_index += row_count
-            column_data = lst[start_index:cursor_index]
-            for row in range(1, len(column_data)):
-              ws.cell(column=column_index, row=row, value=column_data[row])
-            # ws.append(column_data)
-            column_index += 1
+          for row in lst:
+            row = re.sub(r" +", '=', row)
+            row = row.split('=')
+            ws.append(row)
+          # reg = re.compile('^(1)[0-9]{10}$')
+          # row_count = 0
+          # total = len(lst)
+          # for txt in lst:
+          #   if reg.match(txt):
+          #     row_count = total - lst.index(txt)
+          #     print(row_count)
+          #     break
+          # wb = Workbook()
+          # ws = wb.active
+          # cursor_index = total % row_count
+          # column_index = 1
+          # while cursor_index < total:
+          #   start_index = cursor_index
+          #   cursor_index += row_count
+          #   column_data = lst[start_index:cursor_index]
+          #   for row in range(1, len(column_data)):
+          #     ws.cell(column=column_index, row=row, value=column_data[row])
+          #   # ws.append(column_data)
+          #   column_index += 1
 
           dist_path = f'result/{filename}.xlsx'
           if os.path.exists(dist_path):
@@ -65,6 +71,6 @@ for entry in entries:
       except ValueError as e:
         print('值错误: ', str(e))
       except:
-        print('未知错误错误: ', str(sys.exc_info()[0]))
+        print('未知错误错误: ', str(sys.exc_info()))
     else:
       print('图片格式不支持')
